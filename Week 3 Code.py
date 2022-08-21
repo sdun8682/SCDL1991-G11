@@ -3,7 +3,9 @@ import pandas as pd
 import numpy as np
 import os
 
-file_dir = "/Users/celinabrar/Desktop/SCDL1991-G11-main/High Illumination - 59 animals" # file directory
+import matplotlib.pyplot as plt
+
+file_dir = "./High Illumination - 59 animals" # file directory
 all_csv_list = os.listdir(file_dir) # get csv list
 
 try:
@@ -23,6 +25,10 @@ except FileExistsError:
 
 #print(len(all_csv_list))
 #print(all_csv_list)
+
+# For bar plot, store labels for each file and corresponding number of frontal images:
+# Key = file name, Value = # frontal images
+agdata = {}
 
 for i in all_csv_list:
     
@@ -54,6 +60,9 @@ for i in all_csv_list:
     
     frontal_images_num = len(useful_images)
     print("the number of animal's frontal images in " + dirname + " is " + str(frontal_images_num))
+
+    # Saving the data to the dictionary to plot in bar plot later
+    agdata[dirname] = frontal_images_num
     
     newdf = df.loc[~df.filename.isin(no_image_ls)] 
     # print(newdf)
@@ -61,3 +70,19 @@ for i in all_csv_list:
     # add each csv file with filtered images to the new folder
     newdf.to_csv(os.path.join(new_folder, dirname.rstrip(".csv") + "_frontal.csv"))
 
+
+# ----- Creating plot ---- #
+files = list(agdata.keys())
+counts = list(agdata.values())
+
+fig = plt.figure()
+
+plt.bar(files, counts, color='blue', width = 0.4)
+plt.xlabel('File name')
+plt.ylabel('Count of frontal images')
+plt.title('Count of frontal images by CSV file')
+plt.xticks(rotation = 90) # Rotates X-Axis Ticks by 45-degrees
+plt.margins(y=2)
+# when plot shows up resize horizontally to read the labels better
+plt.show()
+#plt.savefig('file_bar.pdf', bbox_inches = 'tight')
