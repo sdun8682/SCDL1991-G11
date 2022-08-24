@@ -62,7 +62,7 @@ for i in all_csv_list:
     print("the number of animal's frontal images in " + dirname + " is " + str(frontal_images_num))
 
     # Saving the data to the dictionary to plot in bar plot later
-    agdata[dirname] = frontal_images_num
+    agdata[dirname.strip(".csv")] = frontal_images_num
     
     newdf = df.loc[~df.filename.isin(no_image_ls)] 
     # print(newdf)
@@ -81,8 +81,8 @@ plt.bar(files, counts, color='blue', width = 0.4)
 plt.xlabel('File name')
 plt.ylabel('Count of frontal images')
 plt.title('Count of frontal images by CSV file')
-plt.xticks(rotation = 90) # Rotates X-Axis Ticks by 45-degrees
-plt.margins(y=2)
+# Rotates X-Axis Ticks by 45-degrees
+plt.xticks(rotation = 45) 
 # when plot shows up resize horizontally to read the labels better
 plt.show()
 #plt.savefig('file_bar.pdf', bbox_inches = 'tight')
